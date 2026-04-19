@@ -6,6 +6,19 @@ import type {
   Translation,
   Verse
 } from './types.js';
+import { bookMeta, translationMeta } from './catalog.js';
+
+type RawTranslation = { code: string; verse_count: number };
+type RawBook = { code: string; chapter_count: number; verse_count: number };
+type RawVerse = {
+  translation: string;
+  book: string;
+  chapter: number;
+  verse: number;
+  text: string;
+  txid: string;
+  block_height: number;
+};
 
 /**
  * PeckReaderBibleSource talks to a deployed peck-reader HTTP API.
@@ -26,12 +39,38 @@ export class PeckReaderBibleSource implements BibleSource {
     return body.data;
   }
 
-  listTranslations(): Promise<Translation[]> {
-    return this.get<Translation[]>(`/v1/bible/translations`);
+  async listTranslations(): Promise<Translation[]> {
+    const raw = await this.get<RawTranslation[]>(`/v1/bible/translations`);
+    return raw.map((r) => {
+      const m = translationMeta(r.code);
+      return {
+        code: r.code,
+        name: m.name,
+        language: m.language,
+        language_name: m.language_name,
+        direction: m.direction,
+        verse_count: r.verse_count
+      };
+    });
   }
 
-  listBooks(translation: string): Promise<Book[]> {
-    return this.get<Book[]>(`/v1/bible/${encodeURIComponent(translation)}/books`);
+  async listBooks(translation: string): Promise<Book[]> {
+    const raw = await this.get<RawBook[]>(
+      `/v1/bible/${encodeURIComponent(translation)}/books`
+    );
+    const books: Book[] = raw.map((r) => {
+      const m = bookMeta(r.code);
+      return {
+        code: r.code,
+        name: m.name,
+        order: m.order,
+        testament: m.testament,
+        chapter_count: r.chapter_count,
+        verse_count: r.verse_count
+      };
+    });
+    books.sort((a, b) => a.order - b.order || a.code.localeCompare(b.code));
+    return books;
   }
 
   listChapters(translation: string, book: string): Promise<Chapter[]> {
@@ -41,7 +80,7 @@ export class PeckReaderBibleSource implements BibleSource {
   }
 
   getChapter(translation: string, book: string, chapter: number): Promise<Verse[]> {
-    return this.get<Verse[]>(
+    return this.get<RawVerse[]>(
       `/v1/bible/${encodeURIComponent(translation)}/${encodeURIComponent(book)}/${chapter}`
     );
   }
@@ -52,15 +91,28 @@ export class PeckReaderBibleSource implements BibleSource {
     chapter: number,
     verse: number
   ): Promise<Verse | null> {
-    return this.get<Verse | null>(
+    return this.get<RawVerse | null>(
       `/v1/bible/${encodeURIComponent(translation)}/${encodeURIComponent(book)}/${chapter}/${verse}`
     );
   }
 
-  getParallel(book: string, chapter: number, verse: number): Promise<ParallelVerse[]> {
-    return this.get<ParallelVerse[]>(
+  async getParallel(book: string, chapter: number, verse: number): Promise<ParallelVerse[]> {
+    const raw = await this.get<RawVerse[]>(
       `/v1/bible/parallel/${encodeURIComponent(book)}/${chapter}/${verse}`
     );
+    return raw.map((r) => {
+      const m = translationMeta(r.translation);
+      return {
+        translation: r.translation,
+        translation_name: m.name,
+        language: m.language,
+        language_name: m.language_name,
+        direction: m.direction,
+        text: r.text,
+        txid: r.txid,
+        block_height: r.block_height
+      };
+    });
   }
 
   async close(): Promise<void> {

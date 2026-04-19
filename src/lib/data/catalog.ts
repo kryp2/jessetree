@@ -7,20 +7,112 @@ export type TranslationMeta = {
   language: string;
   language_name: string;
   direction: 'ltr' | 'rtl';
+  publisher: string;
+  year: number;
+  license: string;
+  source_url?: string;
 };
 
 export const TRANSLATIONS: Record<string, TranslationMeta> = {
-  no_1930: { name: 'Norsk Bibel 1930', language: 'no', language_name: 'Norsk (Bibelselskapet)', direction: 'ltr' },
-  en_kjv: { name: 'King James Version', language: 'en', language_name: 'English (1611)', direction: 'ltr' },
-  en_asv: { name: 'American Standard Version', language: 'en', language_name: 'English (1901)', direction: 'ltr' },
-  en_bbe: { name: 'Bible in Basic English', language: 'en', language_name: 'English (1949)', direction: 'ltr' },
-  en_dr: { name: 'Douay-Rheims Bible', language: 'en', language_name: 'English (Catholic, 1899)', direction: 'ltr' },
-  de_schlachter: { name: 'Schlachter Bibel', language: 'de', language_name: 'Deutsch', direction: 'ltr' },
-  es_rvr: { name: 'Reina-Valera Revisada', language: 'es', language_name: 'Español', direction: 'ltr' },
-  pt_aa: { name: 'Almeida Revista e Atualizada', language: 'pt', language_name: 'Português', direction: 'ltr' },
-  la_vulgata: { name: 'Biblia Sacra Vulgata', language: 'la', language_name: 'Latina', direction: 'ltr' },
-  grc_nt: { name: 'Novum Testamentum Graece', language: 'grc', language_name: 'Ἑλληνικά (NT)', direction: 'ltr' },
-  he_wlc: { name: 'Westminster Leningrad Codex', language: 'he', language_name: 'עברית (Tanakh)', direction: 'rtl' }
+  no_1930: {
+    name: 'Norsk Bibel 1930',
+    language: 'no',
+    language_name: 'Norsk (Bibelselskapet)',
+    direction: 'ltr',
+    publisher: 'Det Norske Bibelselskap',
+    year: 1930,
+    license: 'Public domain (Norway, copyright expired)'
+  },
+  en_kjv: {
+    name: 'King James Version',
+    language: 'en',
+    language_name: 'English (1611)',
+    direction: 'ltr',
+    publisher: 'Church of England',
+    year: 1611,
+    license: 'Public domain'
+  },
+  en_asv: {
+    name: 'American Standard Version',
+    language: 'en',
+    language_name: 'English (1901)',
+    direction: 'ltr',
+    publisher: 'American Revision Committee',
+    year: 1901,
+    license: 'Public domain'
+  },
+  en_bbe: {
+    name: 'Bible in Basic English',
+    language: 'en',
+    language_name: 'English (1949)',
+    direction: 'ltr',
+    publisher: 'Cambridge University Press · S. H. Hooke',
+    year: 1949,
+    license: 'Public domain'
+  },
+  en_dr: {
+    name: 'Douay-Rheims Bible',
+    language: 'en',
+    language_name: 'English (Catholic, 1899)',
+    direction: 'ltr',
+    publisher: 'Bishop Richard Challoner (revision)',
+    year: 1899,
+    license: 'Public domain'
+  },
+  de_schlachter: {
+    name: 'Schlachter Bibel',
+    language: 'de',
+    language_name: 'Deutsch',
+    direction: 'ltr',
+    publisher: 'Franz Eugen Schlachter',
+    year: 1905,
+    license: 'Public domain (1905 original edition)'
+  },
+  es_rvr: {
+    name: 'Reina-Valera',
+    language: 'es',
+    language_name: 'Español',
+    direction: 'ltr',
+    publisher: 'Casiodoro de Reina · Cipriano de Valera',
+    year: 1602,
+    license: 'Public domain (classical edition)'
+  },
+  pt_aa: {
+    name: 'Almeida',
+    language: 'pt',
+    language_name: 'Português',
+    direction: 'ltr',
+    publisher: 'João Ferreira de Almeida',
+    year: 1681,
+    license: 'Public domain (classical edition; check revision)'
+  },
+  la_vulgata: {
+    name: 'Biblia Sacra Vulgata',
+    language: 'la',
+    language_name: 'Latina',
+    direction: 'ltr',
+    publisher: 'Jerome of Stridon (tr.) · Clementine 1592',
+    year: 1592,
+    license: 'Public domain'
+  },
+  grc_nt: {
+    name: 'Novum Testamentum Graece',
+    language: 'grc',
+    language_name: 'Ἑλληνικά (NT)',
+    direction: 'ltr',
+    publisher: 'Westcott & Hort',
+    year: 1881,
+    license: 'Public domain'
+  },
+  he_wlc: {
+    name: 'Westminster Leningrad Codex',
+    language: 'he',
+    language_name: 'עברית (Tanakh)',
+    direction: 'rtl',
+    publisher: 'Westminster Hebrew Institute',
+    year: 2008,
+    license: 'Free use (CC0-equivalent)'
+  }
 };
 
 // Pure-testament translations: every book is guaranteed OT or NT.

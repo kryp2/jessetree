@@ -17,6 +17,11 @@
 <header class="mb-10">
   <h1 class="font-serif text-4xl mb-2">{data.translation.name}</h1>
   <p class="font-ui text-sm text-ink-muted">{data.translation.language_name}</p>
+  <dl class="font-ui text-xs text-ink-muted mt-4 flex flex-wrap gap-x-6 gap-y-1 max-w-2xl">
+    <div class="flex gap-2"><dt>Publisher</dt><dd class="text-ink">{data.translation.publisher}</dd></div>
+    <div class="flex gap-2"><dt>First published</dt><dd class="text-ink tabular-nums">{data.translation.year}</dd></div>
+    <div class="flex gap-2"><dt>License</dt><dd class="text-ink">{data.translation.license}</dd></div>
+  </dl>
 </header>
 
 {#if ot.length > 0}

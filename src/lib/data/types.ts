@@ -29,6 +29,8 @@ export type Verse = {
   text: string;
   txid: string;
   block_height: number;
+  book_root?: string;
+  chapter_root?: string;
 };
 
 export type ParallelVerse = {

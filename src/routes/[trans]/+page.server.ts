@@ -7,8 +7,9 @@ export const load: PageServerLoad = async ({ params }) => {
   const src = getBibleSource();
   const books = await src.listBooks(params.trans);
   if (books.length === 0) throw error(404, 'translation not found');
+  const meta = translationMeta(params.trans);
   return {
-    translation: { code: params.trans, ...translationMeta(params.trans) },
+    translation: { code: params.trans, ...meta },
     books
   };
 };

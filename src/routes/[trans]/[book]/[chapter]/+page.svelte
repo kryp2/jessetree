@@ -1,15 +1,34 @@
 <script lang="ts">
   import type { PageData } from './$types';
   import { env } from '$env/dynamic/public';
+  import VerseFocusPanel from '$lib/components/VerseFocusPanel.svelte';
   export let data: PageData;
 
   $: dir = data.translation.direction;
+  $: chapterRoot = data.verses[0]?.chapter_root ?? '';
+  $: bookRoot = data.verses[0]?.book_root ?? '';
   const woc = env.PUBLIC_WOC_URL || 'https://whatsonchain.com/tx';
+
+  let focusedVerse: number | null = null;
+
+  function toggleFocus(n: number) {
+    focusedVerse = focusedVerse === n ? null : n;
+  }
+
+  function shortTxid(t: string) {
+    return t.slice(0, 8) + '…' + t.slice(-6);
+  }
+
+  function onKeydown(e: KeyboardEvent) {
+    if (e.key === 'Escape') focusedVerse = null;
+  }
 </script>
 
 <svelte:head>
   <title>{data.book.name} {data.chapter} — {data.translation.name} — jessetree</title>
 </svelte:head>
+
+<svelte:window on:keydown={onKeydown} />
 
 <header class="mb-8">
   <nav class="font-ui text-xs text-ink-muted mb-3 space-x-2">
@@ -20,17 +39,30 @@
   <h1 class="font-serif text-4xl">
     {data.book.name} <span class="text-ink-muted">{data.chapter}</span>
   </h1>
+  {#if chapterRoot || bookRoot}
+    <div class="font-ui text-[11px] text-ink-muted mt-2 flex flex-wrap gap-x-4 gap-y-1">
+      {#if bookRoot}
+        <span>book root: <a class="underline hover:text-accent font-mono" href="{woc}/{bookRoot}" target="_blank" rel="noopener noreferrer">{shortTxid(bookRoot)}</a></span>
+      {/if}
+      {#if chapterRoot}
+        <span>chapter root: <a class="underline hover:text-accent font-mono" href="{woc}/{chapterRoot}" target="_blank" rel="noopener noreferrer">{shortTxid(chapterRoot)}</a></span>
+      {/if}
+    </div>
+  {/if}
 </header>
 
 <article class="reader-prose chapter-flow" dir={dir} lang={data.translation.language}>
   <p>
-    {#each data.verses as v, i}
+    {#each data.verses as v, i (v.verse)}
       <span class="verse" id="v{v.verse}"
-        ><a
+        ><button
+          type="button"
           class="verse-num"
-          href="/{data.translation.code}/{data.book.code}/{data.chapter}/{v.verse}/parallel"
-          title="Compare across translations"
-          >{v.verse}</a
+          class:active={focusedVerse === v.verse}
+          on:click={() => toggleFocus(v.verse)}
+          title="Open verse panel"
+          aria-expanded={focusedVerse === v.verse}
+          >{v.verse}</button
         ><!--
         -->{#if i === 0}<span class="drop-cap">{v.text.slice(0, 1)}</span>{v.text.slice(1)}{:else}{v.text}{/if}<a
           class="chain-badge"
@@ -40,7 +72,15 @@
           title={`Hung on the tree at block ${v.block_height}\ntxid: ${v.txid}`}
           aria-label="View on-chain transaction">●</a
         ></span
-      >{' '}
+      >{#if focusedVerse === v.verse}<VerseFocusPanel
+          translation={data.translation.code}
+          book={data.book.code}
+          chapter={data.chapter}
+          verse={v.verse}
+          txid={v.txid}
+          block_height={v.block_height}
+          on:click={() => (focusedVerse = null)}
+        />{/if}{' '}
     {/each}
   </p>
 </article>
@@ -63,7 +103,7 @@
 <style>
   .chapter-flow :global(p) {
     line-height: 1.85;
-    text-align: justify;
+    text-align: left;
     hyphens: auto;
   }
   .verse {
@@ -78,12 +118,24 @@
     vertical-align: super;
     line-height: 1;
     margin-right: 0.15em;
+    padding: 0 0.25em;
+    border-radius: 3px;
     text-decoration: none;
     user-select: none;
-    transition: color 0.15s;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition:
+      color 0.15s,
+      background-color 0.15s;
   }
   .verse-num:hover {
     color: rgb(var(--color-ink-strong));
+    background-color: rgb(var(--color-bg-elevated));
+  }
+  .verse-num.active {
+    color: rgb(var(--color-bg));
+    background-color: rgb(var(--color-accent));
   }
   .chain-badge {
     display: inline-block;

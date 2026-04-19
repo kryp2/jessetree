@@ -17,7 +17,7 @@ export const TRANSLATIONS: Record<string, TranslationMeta> = {
   no_1930: {
     name: 'Norsk Bibel 1930',
     language: 'no',
-    language_name: 'Norsk (Bibelselskapet)',
+    language_name: 'Norsk',
     direction: 'ltr',
     publisher: 'Det Norske Bibelselskap',
     year: 1930,
@@ -26,7 +26,7 @@ export const TRANSLATIONS: Record<string, TranslationMeta> = {
   en_kjv: {
     name: 'King James Version',
     language: 'en',
-    language_name: 'English (1611)',
+    language_name: 'English',
     direction: 'ltr',
     publisher: 'Church of England',
     year: 1611,
@@ -35,7 +35,7 @@ export const TRANSLATIONS: Record<string, TranslationMeta> = {
   en_asv: {
     name: 'American Standard Version',
     language: 'en',
-    language_name: 'English (1901)',
+    language_name: 'English',
     direction: 'ltr',
     publisher: 'American Revision Committee',
     year: 1901,
@@ -44,7 +44,7 @@ export const TRANSLATIONS: Record<string, TranslationMeta> = {
   en_bbe: {
     name: 'Bible in Basic English',
     language: 'en',
-    language_name: 'English (1949)',
+    language_name: 'English',
     direction: 'ltr',
     publisher: 'Cambridge University Press · S. H. Hooke',
     year: 1949,
@@ -53,7 +53,7 @@ export const TRANSLATIONS: Record<string, TranslationMeta> = {
   en_dr: {
     name: 'Douay-Rheims Bible',
     language: 'en',
-    language_name: 'English (Catholic, 1899)',
+    language_name: 'English',
     direction: 'ltr',
     publisher: 'Bishop Richard Challoner (revision)',
     year: 1899,
@@ -98,7 +98,7 @@ export const TRANSLATIONS: Record<string, TranslationMeta> = {
   grc_nt: {
     name: 'Novum Testamentum Graece',
     language: 'grc',
-    language_name: 'Ἑλληνικά (NT)',
+    language_name: 'Ἑλληνικά',
     direction: 'ltr',
     publisher: 'Westcott & Hort',
     year: 1881,
@@ -107,7 +107,7 @@ export const TRANSLATIONS: Record<string, TranslationMeta> = {
   he_wlc: {
     name: 'Westminster Leningrad Codex',
     language: 'he',
-    language_name: 'עברית (Tanakh)',
+    language_name: 'עברית',
     direction: 'rtl',
     publisher: 'Westminster Hebrew Institute',
     year: 2008,

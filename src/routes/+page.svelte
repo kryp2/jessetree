@@ -29,9 +29,9 @@
     {#each data.translations as t}
       <li>
         <a href="/{t.code}" class="flex items-baseline justify-between gap-4 py-4 hover:bg-bg-elevated -mx-2 px-2 transition rounded">
-          <div class="min-w-0">
-            <div class="font-serif text-xl">{t.name}</div>
-            <div class="font-ui text-xs text-ink-muted mt-1 flex flex-wrap gap-x-3 gap-y-0.5">
+          <div class="min-w-0 flex-1">
+            <div class="font-serif text-xl truncate">{t.name}</div>
+            <div class="font-ui text-xs text-ink-muted mt-1 flex items-baseline gap-3 whitespace-nowrap overflow-hidden">
               <span>{t.language_name}</span>
               <span class="tabular-nums">{t.year}</span>
               <span class="truncate">{t.publisher}</span>

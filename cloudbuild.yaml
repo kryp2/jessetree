@@ -1,0 +1,47 @@
+# Cloud Build pipeline for jessetree.
+# Triggered manually or on push to main. Deploys to Cloud Run in europe-west1.
+#
+# Required substitutions:
+#   _PECK_READER_URL  — e.g. https://reader.peck.to (used when data source = peck-reader)
+#   _DATA_SOURCE      — "peck-reader" (default) or "postgres"
+#
+# For direct Postgres, add --add-cloudsql-instances and PG secrets manually.
+
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - -t
+      - europe-west1-docker.pkg.dev/$PROJECT_ID/jessetree/jessetree:$COMMIT_SHA
+      - .
+
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - europe-west1-docker.pkg.dev/$PROJECT_ID/jessetree/jessetree:$COMMIT_SHA
+
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - jessetree
+      - --image=europe-west1-docker.pkg.dev/$PROJECT_ID/jessetree/jessetree:$COMMIT_SHA
+      - --region=europe-west1
+      - --platform=managed
+      - --allow-unauthenticated
+      - --port=8080
+      - --memory=512Mi
+      - --min-instances=0
+      - --max-instances=10
+      - --set-env-vars=JESSETREE_DATA_SOURCE=${_DATA_SOURCE},PECK_READER_URL=${_PECK_READER_URL},PUBLIC_SITE_URL=https://jessetree.xyz
+
+substitutions:
+  _DATA_SOURCE: peck-reader
+  _PECK_READER_URL: https://reader.peck.to
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+images:
+  - europe-west1-docker.pkg.dev/$PROJECT_ID/jessetree/jessetree:$COMMIT_SHA

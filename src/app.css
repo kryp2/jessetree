@@ -1,0 +1,34 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: theme('fontFamily.serif');
+  }
+  .font-ui {
+    font-family: theme('fontFamily.sans');
+  }
+}
+
+@layer components {
+  .reader-prose {
+    @apply prose prose-lg max-w-prose;
+    font-family: theme('fontFamily.serif');
+    --tw-prose-body: theme('colors.parchment.900');
+    --tw-prose-headings: theme('colors.parchment.900');
+    --tw-prose-links: theme('colors.parchment.500');
+    --tw-prose-bold: theme('colors.parchment.900');
+    --tw-prose-quotes: theme('colors.parchment.500');
+    --tw-prose-code: theme('colors.parchment.500');
+  }
+  .verse {
+    @apply relative scroll-mt-24;
+  }
+  .verse-num {
+    @apply text-parchment-500 text-xs align-top mr-1 font-sans select-none;
+  }
+  .chain-badge {
+    @apply inline-block ml-1 text-parchment-500 hover:text-parchment-900 transition-colors text-[0.7em] no-underline select-none;
+  }
+}

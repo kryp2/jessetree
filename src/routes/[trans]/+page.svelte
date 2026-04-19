@@ -1,10 +1,13 @@
 <script lang="ts">
   import type { PageData } from './$types';
   export let data: PageData;
-  $: ot = data.books.filter((b) => b.testament === 'old' && b.order < 999);
-  $: nt = data.books.filter((b) => b.testament === 'new' && b.order < 999);
-  $: other = data.books.filter((b) => b.order >= 999);
-  $: useSplit = ot.length >= 20 && nt.length >= 20;
+  $: ot = data.books.filter((b) => b.testament === 'old');
+  $: nt = data.books.filter((b) => b.testament === 'new');
+  $: dir = data.translation.direction;
+  $: pureOT = data.translation.code === 'he_wlc';
+  $: pureNT = data.translation.code === 'grc_nt';
+  $: otLabel = pureOT ? 'Tanakh' : 'Old Testament';
+  $: ntLabel = pureNT ? 'New Testament' : 'New Testament';
 </script>
 
 <svelte:head>
@@ -13,41 +16,31 @@
 
 <header class="mb-10">
   <h1 class="font-serif text-4xl mb-2">{data.translation.name}</h1>
-  <p class="font-ui text-sm text-parchment-500">{data.translation.language_name}</p>
+  <p class="font-ui text-sm text-ink-muted">{data.translation.language_name}</p>
 </header>
 
-{#if useSplit}
+{#if ot.length > 0}
   <section class="mb-10">
-    <h2 class="font-ui text-xs uppercase tracking-widest text-parchment-500 mb-4">Old Testament</h2>
-    <ul class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4 gap-y-2">
+    <h2 class="font-ui text-xs uppercase tracking-widest text-ink-muted mb-4">{otLabel}</h2>
+    <ul class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4 gap-y-2" dir={dir} lang={data.translation.language}>
       {#each ot as b}
         <li>
-          <a href="/{data.translation.code}/{b.code}" class="block py-1.5 font-serif text-lg hover:text-parchment-500 transition">
+          <a href="/{data.translation.code}/{b.code}" class="block py-1.5 font-serif text-lg hover:text-ink-muted transition">
             {b.name}
           </a>
         </li>
       {/each}
     </ul>
   </section>
+{/if}
+
+{#if nt.length > 0}
   <section>
-    <h2 class="font-ui text-xs uppercase tracking-widest text-parchment-500 mb-4">New Testament</h2>
-    <ul class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4 gap-y-2">
+    <h2 class="font-ui text-xs uppercase tracking-widest text-ink-muted mb-4">{ntLabel}</h2>
+    <ul class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4 gap-y-2" dir={dir} lang={data.translation.language}>
       {#each nt as b}
         <li>
-          <a href="/{data.translation.code}/{b.code}" class="block py-1.5 font-serif text-lg hover:text-parchment-500 transition">
-            {b.name}
-          </a>
-        </li>
-      {/each}
-    </ul>
-  </section>
-{:else}
-  <section>
-    <h2 class="font-ui text-xs uppercase tracking-widest text-parchment-500 mb-4">Books</h2>
-    <ul class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4 gap-y-2" dir={data.translation.direction}>
-      {#each data.books as b}
-        <li>
-          <a href="/{data.translation.code}/{b.code}" class="block py-1.5 font-serif text-lg hover:text-parchment-500 transition">
+          <a href="/{data.translation.code}/{b.code}" class="block py-1.5 font-serif text-lg hover:text-ink-muted transition">
             {b.name}
           </a>
         </li>

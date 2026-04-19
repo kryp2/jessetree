@@ -10,18 +10,79 @@ export type TranslationMeta = {
 };
 
 export const TRANSLATIONS: Record<string, TranslationMeta> = {
-  no_1930: { name: 'Norsk 1930', language: 'no', language_name: 'Norsk', direction: 'ltr' },
-  en_kjv: { name: 'King James Version', language: 'en', language_name: 'English', direction: 'ltr' },
-  en_asv: { name: 'American Standard Version', language: 'en', language_name: 'English', direction: 'ltr' },
-  en_bbe: { name: 'Bible in Basic English', language: 'en', language_name: 'English', direction: 'ltr' },
-  en_dr: { name: 'Douay-Rheims', language: 'en', language_name: 'English', direction: 'ltr' },
-  de_schlachter: { name: 'Schlachter', language: 'de', language_name: 'Deutsch', direction: 'ltr' },
+  no_1930: { name: 'Norsk Bibel 1930', language: 'no', language_name: 'Norsk (Bibelselskapet)', direction: 'ltr' },
+  en_kjv: { name: 'King James Version', language: 'en', language_name: 'English (1611)', direction: 'ltr' },
+  en_asv: { name: 'American Standard Version', language: 'en', language_name: 'English (1901)', direction: 'ltr' },
+  en_bbe: { name: 'Bible in Basic English', language: 'en', language_name: 'English (1949)', direction: 'ltr' },
+  en_dr: { name: 'Douay-Rheims Bible', language: 'en', language_name: 'English (Catholic, 1899)', direction: 'ltr' },
+  de_schlachter: { name: 'Schlachter Bibel', language: 'de', language_name: 'Deutsch', direction: 'ltr' },
   es_rvr: { name: 'Reina-Valera Revisada', language: 'es', language_name: 'Español', direction: 'ltr' },
-  pt_aa: { name: 'Almeida Atualizada', language: 'pt', language_name: 'Português', direction: 'ltr' },
-  la_vulgata: { name: 'Vulgata', language: 'la', language_name: 'Latina', direction: 'ltr' },
-  grc_nt: { name: 'Greek New Testament', language: 'grc', language_name: 'Ἑλληνικά', direction: 'ltr' },
-  he_wlc: { name: 'Westminster Leningrad Codex', language: 'he', language_name: 'עברית', direction: 'rtl' }
+  pt_aa: { name: 'Almeida Revista e Atualizada', language: 'pt', language_name: 'Português', direction: 'ltr' },
+  la_vulgata: { name: 'Biblia Sacra Vulgata', language: 'la', language_name: 'Latina', direction: 'ltr' },
+  grc_nt: { name: 'Novum Testamentum Graece', language: 'grc', language_name: 'Ἑλληνικά (NT)', direction: 'ltr' },
+  he_wlc: { name: 'Westminster Leningrad Codex', language: 'he', language_name: 'עברית (Tanakh)', direction: 'rtl' }
 };
+
+// Pure-testament translations: every book is guaranteed OT or NT.
+export const PURE_NT = new Set(['grc_nt']);
+export const PURE_OT = new Set(['he_wlc']);
+
+// NT book codes per translation (27 books each in the Protestant canon).
+// en_kjv, en_asv, en_bbe, es_rvr and de_schlachter all use identical English
+// codes on-chain despite different source languages, so they share one set.
+const NT_ENGLISH = new Set<string>([
+  'matthew', 'mark', 'luke', 'john', 'acts', 'romans',
+  '1-corinthians', '2-corinthians', 'galatians', 'ephesians',
+  'philippians', 'colossians', '1-thessalonians', '2-thessalonians',
+  '1-timothy', '2-timothy', 'titus', 'philemon', 'hebrews', 'james',
+  '1-peter', '2-peter', '1-john', '2-john', '3-john', 'jude', 'revelation'
+]);
+
+export const NT_BY_TRANSLATION: Record<string, Set<string>> = {
+  en_kjv: NT_ENGLISH,
+  en_asv: NT_ENGLISH,
+  en_bbe: NT_ENGLISH,
+  es_rvr: NT_ENGLISH,
+  de_schlachter: NT_ENGLISH,
+  en_dr: new Set<string>([
+    'matthew', 'mark', 'luke', 'john', 'acts', 'romans',
+    '1-corinthians', '2-corinthians', 'galatians', 'ephesians',
+    'philippians', 'colossians', '1-thessalonians', '2-thessalonians',
+    '1-timothy', '2-timothy', 'titus', 'philemon', 'hebrews', 'james',
+    '1-peter', '2-peter', '1-john', '2-john', '3-john', 'jude', 'apocalypse'
+  ]),
+  no_1930: new Set<string>([
+    'matteus', 'markus', 'lukas', 'johannes', 'apostlenes-gjerninger', 'romerne',
+    '1-korinter', '2-korinter', 'galaterne', 'efeserne', 'filipperne', 'kolosserne',
+    '1-tessaloniker', '2-tessaloniker', '1-timoteus', '2-timoteus', 'titus', 'filemon',
+    'hebreerne', 'jakob', '1-peter', '2-peter', '1-johannes', '2-johannes', '3-johannes',
+    'judas', 'åpenbaringen'
+  ]),
+  pt_aa: new Set<string>([
+    'mateus', 'marcos', 'lucas', 'joão', 'atos', 'romanos',
+    '1-coríntios', '2-coríntios', 'gálatas', 'efésios', 'filipenses', 'colossenses',
+    '1-tessalonicenses', '2-tessalonicenses', '1-timóteo', '2-timóteo', 'tito', 'filemom',
+    'hebreus', 'tiago', '1-pedro', '2-pedro', '1-joão', '2-joão', '3-joão',
+    'judas', 'apocalipse'
+  ]),
+  la_vulgata: new Set<string>([
+    'matthaeus', 'marcus', 'lucas', 'ioannes', 'actus-apostolorum', 'ad-romanos',
+    'ad-corinthios-i', 'ad-corinthios-ii', 'ad-galatas', 'ad-ephesios',
+    'ad-philippenses', 'ad-colossenses', 'ad-thessalonicenses-i', 'ad-thessalonicenses-ii',
+    'ad-timotheum-i', 'ad-timotheum-ii', 'ad-titum', 'ad-philemonem', 'ad-hebraeos',
+    'iacobi', 'petri-i', 'petri-ii', 'ioannis-i', 'ioannis-ii', 'ioannis-iii',
+    'iudae', 'apocalypsis'
+  ])
+};
+
+/** Return 'old' | 'new' for a given book code in a translation, or null if unknown. */
+export function resolveTestament(translation: string, bookCode: string): 'old' | 'new' | null {
+  if (PURE_NT.has(translation)) return 'new';
+  if (PURE_OT.has(translation)) return 'old';
+  const ntSet = NT_BY_TRANSLATION[translation];
+  if (!ntSet) return null;
+  return ntSet.has(bookCode) ? 'new' : 'old';
+}
 
 export type BookMeta = {
   name: string;

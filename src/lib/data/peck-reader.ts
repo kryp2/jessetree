@@ -6,7 +6,7 @@ import type {
   Translation,
   Verse
 } from './types.js';
-import { bookMeta, translationMeta } from './catalog.js';
+import { bookMeta, resolveTestament, translationMeta } from './catalog.js';
 
 type RawTranslation = { code: string; verse_count: number };
 type RawBook = { code: string; chapter_count: number; verse_count: number };
@@ -60,16 +60,21 @@ export class PeckReaderBibleSource implements BibleSource {
     );
     const books: Book[] = raw.map((r) => {
       const m = bookMeta(r.code);
+      const testament = resolveTestament(translation, r.code) ?? m.testament;
       return {
         code: r.code,
         name: m.name,
         order: m.order,
-        testament: m.testament,
+        testament,
         chapter_count: r.chapter_count,
         verse_count: r.verse_count
       };
     });
-    books.sort((a, b) => a.order - b.order || a.code.localeCompare(b.code));
+    books.sort((a, b) => {
+      if (a.testament !== b.testament) return a.testament === 'old' ? -1 : 1;
+      if (a.order !== b.order) return a.order - b.order;
+      return a.code.localeCompare(b.code);
+    });
     return books;
   }
 

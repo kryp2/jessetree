@@ -54,11 +54,11 @@
 <style>
   .drop-cap {
     float: left;
-    font-family: theme('fontFamily.serif');
+    font-family: var(--reader-font);
     font-size: 3.5rem;
     line-height: 0.9;
     padding: 0.35rem 0.5rem 0 0;
-    color: theme('colors.parchment.500');
+    color: rgb(var(--color-ink-muted));
     font-weight: 500;
   }
   [dir='rtl'] .drop-cap {

@@ -10,13 +10,24 @@ export default {
         sans: ['"Inter"', 'system-ui', '-apple-system', 'sans-serif']
       },
       colors: {
+        // Legacy aliases — keep working, now theme-switchable via CSS vars.
         parchment: {
-          50: '#faf7f0',
-          100: '#f3ecd9',
-          200: '#e6d7ad',
-          500: '#9a7b3f',
-          900: '#3f2e14'
-        }
+          50: 'rgb(var(--color-bg) / <alpha-value>)',
+          100: 'rgb(var(--color-bg-elevated) / <alpha-value>)',
+          200: 'rgb(var(--color-border) / <alpha-value>)',
+          500: 'rgb(var(--color-ink-muted) / <alpha-value>)',
+          900: 'rgb(var(--color-ink) / <alpha-value>)'
+        },
+        // Semantic names.
+        bg: 'rgb(var(--color-bg) / <alpha-value>)',
+        'bg-elevated': 'rgb(var(--color-bg-elevated) / <alpha-value>)',
+        border: 'rgb(var(--color-border) / <alpha-value>)',
+        ink: {
+          DEFAULT: 'rgb(var(--color-ink) / <alpha-value>)',
+          strong: 'rgb(var(--color-ink-strong) / <alpha-value>)',
+          muted: 'rgb(var(--color-ink-muted) / <alpha-value>)'
+        },
+        accent: 'rgb(var(--color-accent) / <alpha-value>)'
       }
     }
   },

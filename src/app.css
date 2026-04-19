@@ -3,32 +3,69 @@
 @tailwind utilities;
 
 @layer base {
+  :root,
+  [data-theme='parchment'] {
+    --color-bg: 250 247 240;
+    --color-bg-elevated: 243 236 217;
+    --color-border: 230 215 173;
+    --color-ink: 63 46 20;
+    --color-ink-strong: 31 23 10;
+    --color-ink-muted: 154 123 63;
+    --color-accent: 154 123 63;
+    --reader-font: 'EB Garamond', Georgia, Cambria, 'Times New Roman', serif;
+    color-scheme: light;
+  }
+  [data-theme='ink'] {
+    --color-bg: 255 255 255;
+    --color-bg-elevated: 255 255 255;
+    --color-border: 20 20 20;
+    --color-ink: 10 10 10;
+    --color-ink-strong: 0 0 0;
+    --color-ink-muted: 70 70 70;
+    --color-accent: 0 0 0;
+    color-scheme: light;
+  }
+  [data-theme='midnight'] {
+    --color-bg: 20 17 12;
+    --color-bg-elevated: 28 24 18;
+    --color-border: 58 47 32;
+    --color-ink: 232 223 201;
+    --color-ink-strong: 245 238 216;
+    --color-ink-muted: 154 137 105;
+    --color-accent: 201 165 95;
+    color-scheme: dark;
+  }
   html {
-    font-family: theme('fontFamily.serif');
+    font-family: var(--reader-font);
+    background-color: rgb(var(--color-bg));
+    color: rgb(var(--color-ink));
   }
   .font-ui {
-    font-family: theme('fontFamily.sans');
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
 }
 
 @layer components {
   .reader-prose {
     @apply prose prose-lg max-w-prose;
-    font-family: theme('fontFamily.serif');
-    --tw-prose-body: theme('colors.parchment.900');
-    --tw-prose-headings: theme('colors.parchment.900');
-    --tw-prose-links: theme('colors.parchment.500');
-    --tw-prose-bold: theme('colors.parchment.900');
-    --tw-prose-quotes: theme('colors.parchment.500');
-    --tw-prose-code: theme('colors.parchment.500');
+    font-family: var(--reader-font);
+    --tw-prose-body: rgb(var(--color-ink));
+    --tw-prose-headings: rgb(var(--color-ink-strong));
+    --tw-prose-links: rgb(var(--color-accent));
+    --tw-prose-bold: rgb(var(--color-ink-strong));
+    --tw-prose-quotes: rgb(var(--color-ink-muted));
+    --tw-prose-code: rgb(var(--color-ink-muted));
+  }
+  [data-theme='ink'] .reader-prose {
+    font-weight: 500;
   }
   .verse {
     @apply relative scroll-mt-24;
   }
   .verse-num {
-    @apply text-parchment-500 text-xs align-top mr-1 font-sans select-none;
+    @apply text-ink-muted text-xs align-top mr-1 font-ui select-none;
   }
   .chain-badge {
-    @apply inline-block ml-1 text-parchment-500 hover:text-parchment-900 transition-colors text-[0.7em] no-underline select-none;
+    @apply inline-block ml-1 text-ink-muted hover:text-ink transition-colors text-[0.7em] no-underline select-none;
   }
 }

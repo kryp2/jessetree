@@ -10,17 +10,17 @@ export type TranslationMeta = {
 };
 
 export const TRANSLATIONS: Record<string, TranslationMeta> = {
-  no_1930: { name: 'Norsk (1930)', language: 'no', language_name: 'Norsk', direction: 'ltr' },
-  kjv: { name: 'King James Version', language: 'en', language_name: 'English', direction: 'ltr' },
-  asv: { name: 'American Standard Version', language: 'en', language_name: 'English', direction: 'ltr' },
-  web: { name: 'World English Bible', language: 'en', language_name: 'English', direction: 'ltr' },
-  bbe: { name: 'Bible in Basic English', language: 'en', language_name: 'English', direction: 'ltr' },
-  ylt: { name: "Young's Literal Translation", language: 'en', language_name: 'English', direction: 'ltr' },
-  dby: { name: 'Darby Translation', language: 'en', language_name: 'English', direction: 'ltr' },
-  akjv: { name: 'American King James', language: 'en', language_name: 'English', direction: 'ltr' },
-  he_wlc: { name: 'Westminster Leningrad Codex', language: 'he', language_name: 'עברית', direction: 'rtl' },
+  no_1930: { name: 'Norsk 1930', language: 'no', language_name: 'Norsk', direction: 'ltr' },
+  en_kjv: { name: 'King James Version', language: 'en', language_name: 'English', direction: 'ltr' },
+  en_asv: { name: 'American Standard Version', language: 'en', language_name: 'English', direction: 'ltr' },
+  en_bbe: { name: 'Bible in Basic English', language: 'en', language_name: 'English', direction: 'ltr' },
+  en_dr: { name: 'Douay-Rheims', language: 'en', language_name: 'English', direction: 'ltr' },
+  de_schlachter: { name: 'Schlachter', language: 'de', language_name: 'Deutsch', direction: 'ltr' },
+  es_rvr: { name: 'Reina-Valera Revisada', language: 'es', language_name: 'Español', direction: 'ltr' },
+  pt_aa: { name: 'Almeida Atualizada', language: 'pt', language_name: 'Português', direction: 'ltr' },
+  la_vulgata: { name: 'Vulgata', language: 'la', language_name: 'Latina', direction: 'ltr' },
   grc_nt: { name: 'Greek New Testament', language: 'grc', language_name: 'Ἑλληνικά', direction: 'ltr' },
-  lat_vulgate: { name: 'Vulgata', language: 'la', language_name: 'Latina', direction: 'ltr' }
+  he_wlc: { name: 'Westminster Leningrad Codex', language: 'he', language_name: 'עברית', direction: 'rtl' }
 };
 
 export type BookMeta = {
@@ -29,9 +29,12 @@ export type BookMeta = {
   testament: 'old' | 'new';
 };
 
-// Canonical ordering + English display names for the 66-book Protestant canon.
-// Book codes match lowercase English names posted on-chain.
-export const BOOKS: Record<string, BookMeta> = {
+// Canonical ordering hints for English / Norwegian book codes. Used to order
+// sidebar listings when present. Codes on-chain are language-specific
+// (`1-mosebok` in no_1930, `genesis` / `1-chronicles` in KJV,
+// `בראשית` in he_wlc), so this is a best-effort helper — unknown books
+// fall through with order=999 and are sorted alphabetically by their code.
+const PROTESTANT_66: Record<string, BookMeta> = {
   // Old Testament
   genesis: { name: 'Genesis', order: 1, testament: 'old' },
   exodus: { name: 'Exodus', order: 2, testament: 'old' },
@@ -102,6 +105,34 @@ export const BOOKS: Record<string, BookMeta> = {
   revelation: { name: 'Revelation', order: 66, testament: 'new' }
 };
 
+// English codes use single words; KJV/ASV etc. use '1-john' hyphenated forms.
+// Build aliases so both styles resolve.
+export const BOOKS: Record<string, BookMeta> = Object.fromEntries(
+  Object.entries(PROTESTANT_66).flatMap(([k, v]) => [
+    [k, v],
+    [k.replace(/_/g, '-'), v]
+  ])
+);
+
+/**
+ * Convert a book code to a display name.
+ * Strategy: look up in the canonical map first (English names), else prettify
+ * the code itself (replace hyphens/underscores with spaces, title-case ASCII).
+ */
+export function prettifyBookCode(code: string): string {
+  const meta = BOOKS[code];
+  if (meta) return meta.name;
+  // Prettify: split on - or _, title-case ASCII tokens, leave non-ASCII as-is.
+  return code
+    .split(/[-_]/)
+    .map((t) => {
+      if (/^\d+$/.test(t)) return t;
+      if (!/[a-zA-Z]/.test(t)) return t;
+      return t.charAt(0).toLocaleUpperCase() + t.slice(1);
+    })
+    .join(' ');
+}
+
 export function translationMeta(code: string): TranslationMeta {
   return (
     TRANSLATIONS[code] ?? {
@@ -114,5 +145,5 @@ export function translationMeta(code: string): TranslationMeta {
 }
 
 export function bookMeta(code: string): BookMeta {
-  return BOOKS[code] ?? { name: code, order: 999, testament: 'old' };
+  return BOOKS[code] ?? { name: prettifyBookCode(code), order: 999, testament: 'old' };
 }

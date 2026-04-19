@@ -3,9 +3,9 @@
 
   type Theme = 'parchment' | 'ink' | 'midnight';
   const THEMES: { id: Theme; label: string; glyph: string }[] = [
-    { id: 'parchment', label: 'Parchment', glyph: '◐' },
+    { id: 'parchment', label: 'Parchment', glyph: '☀' },
     { id: 'ink', label: 'Ink', glyph: '●' },
-    { id: 'midnight', label: 'Midnight', glyph: '○' }
+    { id: 'midnight', label: 'Midnight', glyph: '☾' }
   ];
 
   let current: Theme = 'parchment';
@@ -31,14 +31,14 @@
   {#each THEMES as t}
     <button
       type="button"
-      class="w-7 h-7 rounded flex items-center justify-center transition"
+      class="w-7 h-7 rounded flex items-center justify-center transition text-base"
       class:active={current === t.id}
       class:inactive={current !== t.id}
       on:click={() => apply(t.id)}
       title={t.label}
       aria-pressed={current === t.id}
     >
-      <span aria-hidden="true">{t.glyph}</span>
+      <span aria-hidden="true" class="leading-none">{t.glyph}</span>
       <span class="sr-only">{t.label}</span>
     </button>
   {/each}

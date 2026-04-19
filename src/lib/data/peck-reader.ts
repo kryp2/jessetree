@@ -51,7 +51,10 @@ export class PeckReaderBibleSource implements BibleSource {
         language: m.language,
         language_name: m.language_name,
         direction: m.direction,
-        verse_count: r.verse_count
+        verse_count: r.verse_count,
+        publisher: m.publisher,
+        year: m.year,
+        license: m.license
       };
     });
   }

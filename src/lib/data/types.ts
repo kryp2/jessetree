@@ -5,6 +5,9 @@ export type Translation = {
   language_name: string;
   direction: 'ltr' | 'rtl';
   verse_count: number;
+  publisher: string;
+  year: number;
+  license: string;
 };
 
 export type Book = {

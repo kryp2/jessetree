@@ -47,7 +47,10 @@ export class PostgresBibleSource implements BibleSource {
         language: m.language,
         language_name: m.language_name,
         direction: m.direction,
-        verse_count: parseInt(r.count, 10)
+        verse_count: parseInt(r.count, 10),
+        publisher: m.publisher,
+        year: m.year,
+        license: m.license
       };
     });
   }

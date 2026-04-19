@@ -45,11 +45,10 @@
 
   <footer class="border-t border-border mt-16">
     <div class="max-w-4xl mx-auto px-6 py-8 font-ui text-xs text-ink-muted flex flex-wrap gap-x-6 gap-y-2 items-center">
-      <span>A shoot will come up from the stump of Jesse. — Isaiah 11:1</span>
-      <span class="ml-auto">
+      <span>
         Scripture read from <a href="https://bitcoinschema.org" class="underline hover:text-ink">Bitcoin</a>.
       </span>
-      <a href="https://github.com/kryp2/jessetree" class="underline hover:text-ink">source</a>
+      <a href="https://github.com/kryp2/jessetree" class="underline hover:text-ink ml-auto">source</a>
     </div>
   </footer>
 </div>

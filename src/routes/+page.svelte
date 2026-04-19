@@ -25,17 +25,19 @@
 
 <section>
   <h2 class="font-ui text-xs uppercase tracking-widest text-parchment-500 mb-4">Translations</h2>
-  <ul class="divide-y divide-parchment-200 border-y border-parchment-200">
+  <ul class="divide-y divide-border border-y border-border">
     {#each data.translations as t}
       <li>
-        <a href="/{t.code}" class="flex items-baseline justify-between py-4 hover:bg-parchment-100 -mx-2 px-2 transition rounded">
-          <div>
+        <a href="/{t.code}" class="flex items-baseline justify-between gap-4 py-4 hover:bg-bg-elevated -mx-2 px-2 transition rounded">
+          <div class="min-w-0">
             <div class="font-serif text-xl">{t.name}</div>
-            <div class="font-ui text-xs text-parchment-500 mt-1">
-              {t.language_name} · <code>{t.code}</code>
+            <div class="font-ui text-xs text-ink-muted mt-1 flex flex-wrap gap-x-3 gap-y-0.5">
+              <span>{t.language_name}</span>
+              <span class="tabular-nums">{t.year}</span>
+              <span class="truncate">{t.publisher}</span>
             </div>
           </div>
-          <div class="font-ui text-xs text-parchment-500 tabular-nums">
+          <div class="font-ui text-xs text-ink-muted tabular-nums shrink-0">
             {t.verse_count.toLocaleString()} verses
           </div>
         </a>

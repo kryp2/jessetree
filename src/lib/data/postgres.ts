@@ -7,7 +7,7 @@ import type {
   Translation,
   Verse
 } from './types.js';
-import { bookMeta, translationMeta } from './catalog.js';
+import { bookMeta, resolveTestament, translationMeta } from './catalog.js';
 
 const { Pool } = pg;
 
@@ -71,16 +71,25 @@ export class PostgresBibleSource implements BibleSource {
     );
     const books = rows.map((r) => {
       const m = bookMeta(r.book);
+      // Prefer the translation-aware testament resolver so that translations
+      // whose book codes aren't in the canonical English map (e.g. grc_nt,
+      // he_wlc, no_1930) are still grouped into the correct testament instead
+      // of falling back to bookMeta()'s default of 'old'. Mirrors peck-reader.
+      const testament = resolveTestament(translation, r.book) ?? m.testament;
       return {
         code: r.book,
         name: m.name,
         order: m.order,
-        testament: m.testament,
+        testament,
         chapter_count: parseInt(r.chapters, 10),
         verse_count: parseInt(r.verses, 10)
       };
     });
-    books.sort((a, b) => a.order - b.order);
+    books.sort((a, b) => {
+      if (a.testament !== b.testament) return a.testament === 'old' ? -1 : 1;
+      if (a.order !== b.order) return a.order - b.order;
+      return a.code.localeCompare(b.code);
+    });
     return books;
   }
 

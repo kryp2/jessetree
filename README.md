@@ -1,5 +1,8 @@
 # jessetree
 
+[![CI](https://github.com/kryp2/jessetree/actions/workflows/ci.yml/badge.svg)](https://github.com/kryp2/jessetree/actions/workflows/ci.yml)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 > *"A shoot will come up from the stump of Jesse; from his roots a Branch will bear fruit."* — Isaiah 11:1
 
 An open-source reader for Bible translations posted to **Bitcoin** via the [Bitcoin Schema](https://bitcoinschema.org) protocol.

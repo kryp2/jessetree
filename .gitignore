@@ -9,3 +9,7 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .DS_Store
 *.log
+
+# Interne agent-filer — skal ikke publiseres
+CLAUDE.md
+IN_FLIGHT.md

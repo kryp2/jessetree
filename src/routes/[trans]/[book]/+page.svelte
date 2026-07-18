@@ -21,11 +21,9 @@
       <li>
         <a
           href="/{data.translation.code}/{data.book.code}/{c.number}"
-          class="block text-center py-2 border border-parchment-200 rounded hover:bg-parchment-100 transition font-serif text-lg tabular-nums"
+          class="flex items-center justify-center min-h-[44px] border border-border rounded-md hover:bg-bg-elevated hover:text-ink-strong transition font-serif text-lg tabular-nums"
           title={`${c.verse_count} verses`}
-        >
-          {c.number}
-        </a>
+        >{c.number}</a>
       </li>
     {/each}
   </ul>

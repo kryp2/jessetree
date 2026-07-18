@@ -23,6 +23,7 @@ export const load: PageServerLoad = async ({ params }) => {
     book: { code: params.book, ...bookMeta(params.book) },
     chapter,
     verses,
+    chapters: chapters.map((c) => c.number),
     prev,
     next
   };

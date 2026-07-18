@@ -30,7 +30,7 @@
     <ul class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4 gap-y-2" dir={dir} lang={data.translation.language}>
       {#each ot as b}
         <li>
-          <a href="/{data.translation.code}/{b.code}" class="block py-1.5 font-serif text-lg hover:text-ink-muted transition">
+          <a href="/{data.translation.code}/{b.code}" class="flex items-center min-h-[44px] py-1.5 px-2 -mx-2 rounded-md font-serif text-lg hover:bg-bg-elevated hover:text-ink transition">
             {b.name}
           </a>
         </li>
@@ -45,7 +45,7 @@
     <ul class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4 gap-y-2" dir={dir} lang={data.translation.language}>
       {#each nt as b}
         <li>
-          <a href="/{data.translation.code}/{b.code}" class="block py-1.5 font-serif text-lg hover:text-ink-muted transition">
+          <a href="/{data.translation.code}/{b.code}" class="flex items-center min-h-[44px] py-1.5 px-2 -mx-2 rounded-md font-serif text-lg hover:bg-bg-elevated hover:text-ink transition">
             {b.name}
           </a>
         </li>

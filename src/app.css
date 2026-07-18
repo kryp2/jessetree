@@ -69,3 +69,43 @@
     @apply inline-block ml-1 text-ink-muted hover:text-ink transition-colors text-[0.7em] no-underline select-none;
   }
 }
+
+/* Reading text size — set on <html> as data-reading-size (see +layout.svelte).
+   Unlayered + descendant specificity so it wins over the prose-lg utility.
+   Default 'm' equals the previous fixed size, so existing readers see no change. */
+[data-reading-size='s'] .reader-prose {
+  font-size: 1rem;
+}
+[data-reading-size='m'] .reader-prose {
+  font-size: 1.125rem;
+}
+[data-reading-size='l'] .reader-prose {
+  font-size: 1.3125rem;
+}
+[data-reading-size='xl'] .reader-prose {
+  font-size: 1.5rem;
+}
+
+/* Visible keyboard focus in every theme (accent works on parchment/ink/midnight). */
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid rgb(var(--color-accent));
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* Respect the OS "reduce motion" setting. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

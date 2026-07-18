@@ -1,7 +1,10 @@
 <script lang="ts">
   import type { PageData } from './$types';
   import { env } from '$env/dynamic/public';
+  import { goto } from '$app/navigation';
   import VerseFocusPanel from '$lib/components/VerseFocusPanel.svelte';
+  import ChapterNav from '$lib/components/ChapterNav.svelte';
+  import ReadingSize from '$lib/components/ReadingSize.svelte';
   export let data: PageData;
 
   $: dir = data.translation.direction;
@@ -10,6 +13,19 @@
   const woc = env.PUBLIC_WOC_URL || 'https://whatsonchain.com/tx';
 
   let focusedVerse: number | null = null;
+
+  // Close any open verse panel when navigating to another chapter.
+  let lastLocation = '';
+  $: {
+    const loc = `${data.translation.code}/${data.book.code}/${data.chapter}`;
+    if (loc !== lastLocation) {
+      lastLocation = loc;
+      focusedVerse = null;
+    }
+  }
+
+  $: focusedVerseData =
+    focusedVerse == null ? null : (data.verses.find((v) => v.verse === focusedVerse) ?? null);
 
   function toggleFocus(n: number) {
     focusedVerse = focusedVerse === n ? null : n;
@@ -20,7 +36,20 @@
   }
 
   function onKeydown(e: KeyboardEvent) {
-    if (e.key === 'Escape') focusedVerse = null;
+    if (e.key === 'Escape') {
+      focusedVerse = null;
+      return;
+    }
+    // Left/right arrows page between chapters — but never while typing a note
+    // or when a modifier is held (don't clobber browser shortcuts).
+    const el = e.target as HTMLElement | null;
+    const typing = !!el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable);
+    if (typing || e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === 'ArrowRight' && data.next != null) {
+      goto(`/${data.translation.code}/${data.book.code}/${data.next}`);
+    } else if (e.key === 'ArrowLeft' && data.prev != null) {
+      goto(`/${data.translation.code}/${data.book.code}/${data.prev}`);
+    }
   }
 </script>
 
@@ -33,12 +62,25 @@
 <header class="mb-8">
   <nav class="font-ui text-xs text-ink-muted mb-3 space-x-2">
     <a href="/{data.translation.code}" class="hover:text-ink transition">{data.translation.name}</a>
-    <span>›</span>
+    <span aria-hidden="true">›</span>
     <a href="/{data.translation.code}/{data.book.code}" class="hover:text-ink transition">{data.book.name}</a>
   </nav>
-  <h1 class="font-serif text-4xl">
-    {data.book.name} <span class="text-ink-muted">{data.chapter}</span>
-  </h1>
+  <div class="flex items-center justify-between gap-x-4 gap-y-3 flex-wrap">
+    <h1 class="font-serif text-4xl">
+      {data.book.name} <span class="text-ink-muted">{data.chapter}</span>
+    </h1>
+    <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
+      <ReadingSize />
+      <ChapterNav
+        translation={data.translation.code}
+        bookCode={data.book.code}
+        chapters={data.chapters}
+        current={data.chapter}
+        prev={data.prev}
+        next={data.next}
+      />
+    </div>
+  </div>
   {#if chapterRoot || bookRoot}
     <div class="font-ui text-[11px] text-ink-muted mt-2 flex flex-wrap gap-x-4 gap-y-1">
       {#if bookRoot}
@@ -72,31 +114,48 @@
           title={`Hung on the tree at block ${v.block_height}\ntxid: ${v.txid}`}
           aria-label="View on-chain transaction">●</a
         ></span
-      >{#if focusedVerse === v.verse}<VerseFocusPanel
-          translation={data.translation.code}
-          book={data.book.code}
-          chapter={data.chapter}
-          verse={v.verse}
-          txid={v.txid}
-          block_height={v.block_height}
-          on:click={() => (focusedVerse = null)}
-        />{/if}{' '}
+      >{' '}
     {/each}
   </p>
 </article>
 
-<nav class="mt-14 flex items-center justify-between font-ui text-sm border-t border-border pt-6">
+{#if focusedVerseData}
+  <VerseFocusPanel
+    translation={data.translation.code}
+    book={data.book.code}
+    chapter={data.chapter}
+    verse={focusedVerseData.verse}
+    txid={focusedVerseData.txid}
+    block_height={focusedVerseData.block_height}
+    on:close={() => (focusedVerse = null)}
+  />
+{/if}
+
+<nav class="mt-14 flex items-center justify-between gap-3 font-ui text-sm border-t border-border pt-6">
   {#if data.prev}
-    <a href="/{data.translation.code}/{data.book.code}/{data.prev}" class="hover:text-ink-muted transition">
-      ← chapter {data.prev}
-    </a>
+    <a
+      href="/{data.translation.code}/{data.book.code}/{data.prev}"
+      class="inline-flex items-center min-h-[44px] px-3 -ml-3 rounded-md text-ink-muted hover:text-ink hover:bg-bg-elevated transition"
+      rel="prev"
+    >← chapter {data.prev}</a>
   {:else}
-    <span></span>
+    <span class="min-h-[44px]" aria-hidden="true"></span>
   {/if}
+
+  <a
+    href="/{data.translation.code}/{data.book.code}"
+    class="inline-flex items-center min-h-[44px] px-3 rounded-md text-ink-muted hover:text-ink hover:bg-bg-elevated transition"
+    title="All chapters in {data.book.name}"
+  >All chapters</a>
+
   {#if data.next}
-    <a href="/{data.translation.code}/{data.book.code}/{data.next}" class="hover:text-ink-muted transition ml-auto">
-      chapter {data.next} →
-    </a>
+    <a
+      href="/{data.translation.code}/{data.book.code}/{data.next}"
+      class="inline-flex items-center min-h-[44px] px-3 -mr-3 rounded-md text-ink-muted hover:text-ink hover:bg-bg-elevated transition"
+      rel="next"
+    >chapter {data.next} →</a>
+  {:else}
+    <span class="min-h-[44px]" aria-hidden="true"></span>
   {/if}
 </nav>
 

@@ -15,8 +15,11 @@
           t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'midnight' : 'parchment';
         }
         document.documentElement.setAttribute('data-theme', t);
+        var s = localStorage.getItem('jessetree-reading-size') || 'm';
+        document.documentElement.setAttribute('data-reading-size', s);
       } catch (e) {
         document.documentElement.setAttribute('data-theme', 'parchment');
+        document.documentElement.setAttribute('data-reading-size', 'm');
       }
     })();
   </script>

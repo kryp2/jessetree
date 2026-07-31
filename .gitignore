@@ -13,3 +13,13 @@ vite.config.ts.timestamp-*
 # Interne agent-filer — skal ikke publiseres
 CLAUDE.md
 IN_FLIGHT.md
+
+# --- interne agent-/dev-filer: aldri i git (public repo) ---
+AGENTS.md
+ORCHESTRATION.md
+RUNBOOK*.md
+CONVERGENCE*.md
+*.privat.md
+.gemini/
+.geminirules
+.claude/

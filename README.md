@@ -39,7 +39,7 @@ On jessetree, each ornament is a **Bitcoin transaction**. Verifiable, immutable,
 Two backends, selected via `JESSETREE_DATA_SOURCE`:
 
 - `postgres` — direct SQL against `peck_db` (requires Cloud SQL proxy or peck-to dev env)
-- `peck-reader` — HTTP against a public read-only API (anyone can fork and run)
+- `overlay` / `peck-reader` — HTTP against a public read-only API (anyone can fork and run); production uses `overlay` against `overlay.peck.to` (the standalone `peck-reader` service was retired 2026-09-04)
 
 ## Running locally
 

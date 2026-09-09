@@ -23,10 +23,17 @@ type RawVerse = {
 };
 
 /**
- * PeckReaderBibleSource talks to a deployed peck-reader HTTP API.
+ * PeckReaderBibleSource talks to a deployed peck-reader-compatible HTTP API.
  *
- * Expects the bible endpoints added in peck-reader/internal/handler/bible.go.
- * Endpoints mirror BibleSource one-to-one.
+ * peck-reader itself was retired 2026-09-04; production now points this at
+ * the overlay (overlay.peck.to, repo peck-overlay-schema), which absorbed
+ * peck-reader's bible endpoints byte-for-byte (see that repo's
+ * src/bible/routes.ts) — selected via JESSETREE_DATA_SOURCE=overlay in
+ * src/lib/data/index.ts. The class keeps the peck-reader name since the
+ * endpoint shapes and envelope are still exactly what
+ * peck-reader/internal/handler/bible.go defined; 'peck-reader' remains a
+ * valid JESSETREE_DATA_SOURCE value for anyone running their own
+ * peck-reader-compatible fork.
  */
 export class PeckReaderBibleSource implements BibleSource {
   constructor(private baseUrl: string) {

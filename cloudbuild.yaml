@@ -2,8 +2,15 @@
 # Triggered manually or on push to main. Deploys to Cloud Run in europe-west1.
 #
 # Required substitutions:
-#   _PECK_READER_URL  — e.g. https://reader.peck.to (used when data source = peck-reader)
-#   _DATA_SOURCE      — "peck-reader" (default) or "postgres"
+#   _PECK_READER_URL  — e.g. https://overlay.peck.to (used when data source =
+#                        "overlay" or "peck-reader" — same HTTP client class,
+#                        see src/lib/data/index.ts)
+#   _DATA_SOURCE      — "overlay" (default), "peck-reader", or "postgres"
+#
+# peck-reader was retired 2026-09-04 (peck-meta/DEPLOY_REGIMES.md). The
+# overlay (overlay.peck.to, repo peck-overlay-schema) absorbed its bible
+# endpoints — see that repo's src/bible/routes.ts — so this now points at
+# overlay.peck.to by default instead of the dead reader.peck.to.
 #
 # For direct Postgres, add --add-cloudsql-instances and PG secrets manually.
 
@@ -37,8 +44,8 @@ steps:
       - --set-env-vars=JESSETREE_DATA_SOURCE=${_DATA_SOURCE},PECK_READER_URL=${_PECK_READER_URL},PUBLIC_SITE_URL=https://jessetree.xyz
 
 substitutions:
-  _DATA_SOURCE: peck-reader
-  _PECK_READER_URL: https://reader.peck.to
+  _DATA_SOURCE: overlay
+  _PECK_READER_URL: https://overlay.peck.to
 
 options:
   logging: CLOUD_LOGGING_ONLY

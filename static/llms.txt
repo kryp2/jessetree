@@ -1,0 +1,26 @@
+# jessetree.xyz
+
+An open-source reader for Bible translations stored on Bitcoin. Each verse is an immutable transaction on the Bitcoin blockchain, posted under the peck.cross application tag following the Bitcoin Schema protocol. Readers access the canonical tree — the dominant version consensus across all historical variants — while the full history remains auditable on-chain. Operated by Datamynt AS.
+
+## Try it (no auth)
+
+    curl -s https://jessetree.xyz/
+
+## What an agent can do here
+
+- List translations: GET `https://jessetree.xyz/en_kjv`, auth: none, cost: free
+- Read a book: GET `https://jessetree.xyz/en_kjv/matthew`, auth: none, cost: free
+- Read a chapter: GET `https://jessetree.xyz/en_kjv/matthew/1`, auth: none, cost: free
+- Compare verse translations: GET `https://jessetree.xyz/en_kjv/matthew/1/1/parallel`, auth: none, cost: free
+- Robot crawling: GET `https://jessetree.xyz/robots.txt`, auth: none, cost: free
+
+## Links
+
+- Source: https://github.com/kryp2/jessetree
+- License: MIT
+- Live: https://jessetree.xyz
+
+## Part of the Datamynt fleet
+
+- Fleet manifest (JSON): https://datamynt.no/.well-known/fleet.json
+- Datamynt AS: https://datamynt.no/llms.txt

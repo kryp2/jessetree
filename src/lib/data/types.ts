@@ -61,3 +61,12 @@ export interface BibleSource {
   getParallel(book: string, chapter: number, verse: number): Promise<ParallelVerse[]>;
   close(): Promise<void>;
 }
+
+/** A computed "similar verse" (language similarity, not a cross-reference). */
+export type SimilarRef = {
+  book: string; // book code in the reader's translation
+  book_name: string;
+  chapter: number;
+  verse: number;
+  score: number;
+};

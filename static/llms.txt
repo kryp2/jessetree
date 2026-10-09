@@ -12,6 +12,8 @@ An open-source reader for Bible translations stored on Bitcoin. Each verse is an
 - Read a book: GET `https://jessetree.xyz/en_kjv/matthew`, auth: none, cost: free
 - Read a chapter: GET `https://jessetree.xyz/en_kjv/matthew/1`, auth: none, cost: free
 - Compare verse translations: GET `https://jessetree.xyz/en_kjv/matthew/1/1/parallel`, auth: none, cost: free
+- Advent reading plan (the Jesse Tree): GET `https://jessetree.xyz/advent`, auth: none, cost: free
+- One verse as JSON: GET `https://jessetree.xyz/api/verse/en_kjv/isaiah/11/1`, auth: none, cost: free
 - Robot crawling: GET `https://jessetree.xyz/robots.txt`, auth: none, cost: free
 
 ## Links

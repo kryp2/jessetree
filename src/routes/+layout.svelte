@@ -32,7 +32,8 @@
         jessetree
       </a>
       <div class="flex items-center gap-6">
-        <nav class="font-ui text-sm text-ink-muted">
+        <nav class="font-ui text-sm text-ink-muted flex items-center gap-5">
+          <a href="/advent" class="hover:text-ink transition">advent</a>
           {#if !onHome}
             <a href="/" class="hover:text-ink transition">translations</a>
           {/if}

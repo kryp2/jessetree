@@ -127,6 +127,8 @@
     verse={focusedVerseData.verse}
     txid={focusedVerseData.txid}
     block_height={focusedVerseData.block_height}
+    bookName={data.book.name}
+    similar={data.similar[focusedVerseData.verse] ?? []}
     on:close={() => (focusedVerse = null)}
   />
 {/if}

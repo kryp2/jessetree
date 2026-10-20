@@ -267,6 +267,63 @@ export const BOOKS: Record<string, BookMeta> = Object.fromEntries(
   ])
 );
 
+// no_1930 book codes → canonical (en_kjv) codes. Validated against the data in
+// peck-recall/scripts/jessetree_books.py: chapter counts match for all 66 pairs.
+export const NO_1930_TO_CANON: Record<string, string> = {
+  '1-mosebok': 'genesis', '2-mosebok': 'exodus', '3-mosebok': 'leviticus',
+  '4-mosebok': 'numbers', '5-mosebok': 'deuteronomy', josva: 'joshua',
+  dommerne: 'judges', rut: 'ruth', '1-samuels-bok': '1-samuel',
+  '2-samuels-bok': '2-samuel', '1-kongebok': '1-kings', '2-kongebok': '2-kings',
+  '1-krønikebok': '1-chronicles', '2-krønikebok': '2-chronicles', esra: 'ezra',
+  nehemja: 'nehemiah', ester: 'esther', job: 'job', salmene: 'psalms',
+  'salomos-ordspråk': 'proverbs', predikeren: 'ecclesiastes',
+  høisangen: 'song-of-solomon', jesaja: 'isaiah', jeremia: 'jeremiah',
+  klagesangene: 'lamentations', esekiel: 'ezekiel', daniel: 'daniel',
+  hoseas: 'hosea', joel: 'joel', amos: 'amos', obadja: 'obadiah',
+  jonas: 'jonah', mika: 'micah', nahum: 'nahum', habakuk: 'habakkuk',
+  sefanja: 'zephaniah', haggai: 'haggai', sakarja: 'zechariah',
+  malakias: 'malachi',
+  matteus: 'matthew', markus: 'mark', lukas: 'luke', johannes: 'john',
+  'apostlenes-gjerninger': 'acts', romerne: 'romans', '1-korinter': '1-corinthians',
+  '2-korinter': '2-corinthians', galaterne: 'galatians', efeserne: 'ephesians',
+  filipperne: 'philippians', kolosserne: 'colossians',
+  '1-tessaloniker': '1-thessalonians', '2-tessaloniker': '2-thessalonians',
+  '1-timoteus': '1-timothy', '2-timoteus': '2-timothy', titus: 'titus',
+  filemon: 'philemon', hebreerne: 'hebrews', jakob: 'james',
+  '1-peter': '1-peter', '2-peter': '2-peter', '1-johannes': '1-john',
+  '2-johannes': '2-john', '3-johannes': '3-john', judas: 'jude',
+  åpenbaringen: 'revelation'
+};
+
+const CANON_TO_NO_1930: Record<string, string> = Object.fromEntries(
+  Object.entries(NO_1930_TO_CANON).map(([no, canon]) => [canon, no])
+);
+
+// Norwegian codes keep their own (prettified) names but borrow canonical order,
+// so the no_1930 book list no longer falls back to alphabetical order.
+for (const [no, canon] of Object.entries(NO_1930_TO_CANON)) {
+  if (BOOKS[no]) continue; // shared codes (job, daniel, titus, …) are already correct
+  const c = BOOKS[canon];
+  BOOKS[no] = { name: prettifyBookCode(no), order: c.order, testament: c.testament };
+}
+
+// Translations whose on-chain book codes are the canonical English slugs.
+const ENGLISH_CODES = new Set(['en_kjv', 'en_asv', 'en_bbe', 'es_rvr', 'de_schlachter']);
+
+/** Book code in `translation` → canonical (en_kjv) code, or null if unmapped. */
+export function toCanonBook(translation: string, code: string): string | null {
+  if (ENGLISH_CODES.has(translation)) return code;
+  if (translation === 'no_1930') return NO_1930_TO_CANON[code] ?? null;
+  return null;
+}
+
+/** Canonical (en_kjv) book code → the code used in `translation`, or null. */
+export function fromCanonBook(translation: string, canon: string): string | null {
+  if (ENGLISH_CODES.has(translation)) return canon;
+  if (translation === 'no_1930') return CANON_TO_NO_1930[canon] ?? null;
+  return null;
+}
+
 /**
  * Convert a book code to a display name.
  * Strategy: look up in the canonical map first (English names), else prettify

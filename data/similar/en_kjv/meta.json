@@ -1,0 +1,9 @@
+{
+  "layer": "computed-similarity",
+  "anchor_translation": "en_kjv",
+  "model": "embeddinggemma",
+  "k": 5,
+  "min_cos": 0.55,
+  "generated": "2026-07-24",
+  "note": "Semantic similarity of wording only \u2014 not doctrinal cross-references."
+}

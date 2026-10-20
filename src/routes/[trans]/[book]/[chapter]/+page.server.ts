@@ -2,15 +2,17 @@ import type { PageServerLoad } from './$types';
 import { error } from '@sveltejs/kit';
 import { getBibleSource } from '$lib/data';
 import { bookMeta, translationMeta } from '$lib/data/catalog';
+import { similarForChapter } from '$lib/server/similar';
 
 export const load: PageServerLoad = async ({ params }) => {
   const chapter = parseInt(params.chapter, 10);
   if (!Number.isFinite(chapter) || chapter < 1) throw error(400, 'bad chapter');
 
   const src = getBibleSource();
-  const [verses, chapters] = await Promise.all([
+  const [verses, chapters, similar] = await Promise.all([
     src.getChapter(params.trans, params.book, chapter),
-    src.listChapters(params.trans, params.book)
+    src.listChapters(params.trans, params.book),
+    similarForChapter(params.trans, params.book, chapter)
   ]);
   if (verses.length === 0) throw error(404, 'chapter not found');
 
@@ -23,6 +25,7 @@ export const load: PageServerLoad = async ({ params }) => {
     book: { code: params.book, ...bookMeta(params.book) },
     chapter,
     verses,
+    similar,
     chapters: chapters.map((c) => c.number),
     prev,
     next

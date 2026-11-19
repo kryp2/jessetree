@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { PageData } from './$types';
+  import OrnamentSymbol from '$lib/components/OrnamentSymbol.svelte';
   export let data: PageData;
 </script>
 
@@ -22,6 +23,20 @@
     a tree stored in a public ledger.
   </p>
 </section>
+
+<a
+  href="/advent"
+  class="group mb-14 flex items-center gap-5 rounded-xl border border-border bg-bg-elevated px-5 py-4 hover:border-accent transition"
+>
+  <span class="text-accent shrink-0"><OrnamentSymbol name="stump" size={40} /></span>
+  <span class="min-w-0">
+    <span class="block font-serif text-2xl leading-tight">The Jesse Tree</span>
+    <span class="block font-ui text-sm text-ink-muted mt-1">
+      An Advent journey from creation to Christmas, one ornament and one reading a day.
+    </span>
+  </span>
+  <span class="ml-auto font-ui text-ink-muted group-hover:text-accent transition" aria-hidden="true">→</span>
+</a>
 
 <section>
   <h2 class="font-ui text-xs uppercase tracking-widest text-parchment-500 mb-4">Translations</h2>

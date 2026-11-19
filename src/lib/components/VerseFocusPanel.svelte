@@ -1,6 +1,8 @@
 <script lang="ts">
   import { env } from '$env/dynamic/public';
   import { onMount, createEventDispatcher } from 'svelte';
+  import SimilarVerses from './SimilarVerses.svelte';
+  import type { SimilarRef } from '$lib/data/types';
 
   export let translation: string;
   export let book: string;
@@ -8,6 +10,8 @@
   export let verse: number;
   export let txid: string;
   export let block_height: number;
+  export let bookName: string = book;
+  export let similar: SimilarRef[] = [];
 
   const dispatch = createEventDispatcher();
   const woc = env.PUBLIC_WOC_URL || 'https://whatsonchain.com/tx';
@@ -70,7 +74,7 @@
   <div class="vp-body">
     <header class="flex items-baseline justify-between mb-4">
       <h3 class="text-xs uppercase tracking-widest text-ink-muted">
-        {book} {chapter}:{verse}
+        {bookName} {chapter}:{verse}
       </h3>
       <button
         type="button"
@@ -140,6 +144,13 @@
         </div>
       </section>
     </div>
+
+    {#if similar.length > 0}
+      <section class="mt-5 pt-4 border-t border-border">
+        <h4 class="text-xs uppercase tracking-widest text-ink-muted mb-2">Similar verses</h4>
+        <SimilarVerses {translation} refs={similar} />
+      </section>
+    {/if}
 
     <section class="mt-5 pt-4 border-t border-border">
       <h4 class="text-xs uppercase tracking-widest text-ink-muted mb-2">
